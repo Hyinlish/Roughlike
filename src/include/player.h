@@ -5,6 +5,11 @@
 #include <stdlib.h>
 #include "style.h"
 
-void PlayerUpdate(int ch);
+class Player
+{
+public:
+    int blood = 10;
+    void PlayerUpdate(int ch);
+};
 
 #endif

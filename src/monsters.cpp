@@ -1,16 +1,18 @@
-#include "monsters.h"
+#include "include/monsters.h"
+#include "include/player.h"
 
-void Monster::Init(int y, int x, int speed, int sight)
+using namespace Monster;
+
+void monster::Init(int y, int x, int speed, int sight)
 {
 	this->y = y;
 	this->x = x;
 	this->speed = speed;
 	this->sight = sight;	// 视野半径
 	this->blood = 5;
-	init_pair(MONS_COL, COLOR_YELLOW, COLOR_BLACK);
 }
 
-void Monster::Update()
+void monster::Update(Player player)
 {
 	/*
 	漫游状态
@@ -21,51 +23,42 @@ void Monster::Update()
 	int dx = rand() % (2 * speed + 1) - speed;
 
 	mvaddch(this->y, this->x, EMPTY);
-
-	this->y = this->y + dy;
-	this->x = this->x + dx;
-
+	if((this->y + dy) < LINES && (this->x + dx) < COLS)
+	{
+		this->y = this->y + dy;
+		this->x = this->x + dx;
+	}
+	
 	attron(COLOR_PAIR(MONS_COL));
 	mvaddch(this->y, this->x, MONS);
 	attroff(COLOR_PAIR(MONS_COL));
 
 	// 看看视野里有没有玩家
+	// 遍历扫描
+	int eye;
 	for (int i = -this->sight; i < this->sight + 1; i++)
 	{
 		for (int j = -this->sight; j < this->sight + 1; j++)
 		{
-			int eye = mvinch(this->y + i, this->x + j);
+			eye = mvinch(this->y + i, this->x + j);		// 变换相对坐标为绝对坐标
+			// 看到就发起攻击
+			// 传玩家的相对位置给攻击函数
 			if((eye & A_CHARTEXT) == PLAYER)
 			{
-				Attack(i, j);
+				Attack(i, j, player);
 			}
 		}
 	}
 }
-void Monster::Attack(int y, int x)
+
+void monster::Attack(int y, int x, Player target)
 {
-	mvprintw(LINES-2, 0, "怪物发现了你");
-	// 追击玩家
-	mvaddch(this->y, this->x, EMPTY);
-	if(y < 0)
+	mvprintw(0, COLS-40, "怪物发现了你");
+	// 如果贴身就攻击玩家
+	//
+	if((abs(y) == 0 || 1) && (abs(x) == 0 || 1))
 	{
-		this->y = this->y - speed;
+		mvprintw(1, COLS-40, "Monster Attack!");
+		target.blood -= 1;
 	}
-	if(y > 0)
-	{
-		this->y = this->y + speed;
-	}
-	if(x < 0)
-	{
-		this->x = this->x - speed;
-	}
-	if(x > 0)
-	{
-		this->x = this->x + speed;
-	}
-	attron(COLOR_PAIR(MONS_COL));
-	mvaddch(this->y, this->x, MONS);
-	attroff(COLOR_PAIR(MONS_COL));
-
-
 }

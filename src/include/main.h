@@ -8,6 +8,7 @@
 
 #include "player.h"
 #include "monsters.h"
+#include "map.h"
 #include "style.h"
 
 #endif

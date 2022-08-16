@@ -1,15 +1,11 @@
 lib = ncursesw
-target = src/main.o src/monsters.o
-
-app: $(target)
-	g++ -o $@ $^ -l $(lib)
-
-%.o: src/%.cpp
+	
+app: src/*.cpp
 	g++ -o $@ $^ -l $(lib)
 
 .PHONY: clean
 clean:
-	rm -rf $(target)
+	rm -rf src/*.o
 
 .PHONY: run
 run: app

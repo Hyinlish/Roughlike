@@ -1,40 +1,43 @@
-#include "player.h"
+#include "include/player.h"
+#include <cstddef>
 
-int blood = 10;
 int y = LINES - 1;
 int x = 0;
 
-void PlayerUpdate(int ch)
+bool CheckMove(int y, int x);
+/*
+刷新玩家操作
+*/
+void Player::PlayerUpdate(int ch)
 {
-    ch = getch();
 	attron(COLOR_PAIR(GRASS_COL));
 	switch (ch)
 	{
 	case KEY_UP:
 		if ((y > 0) && CheckMove(y - 1, x))
 		{
-			mvaddch(y, x, EMPTY);
+			mvaddch(y, x, GRASS);
 			y = y - 1;
 		}
 		break;
 	case KEY_DOWN:
 		if ((y < LINES - 1) && CheckMove(y + 1, x))
 		{
-			mvaddch(y, x, EMPTY);
+			mvaddch(y, x, GRASS);
 			y = y + 1;
 		}
 		break;
 	case KEY_LEFT:
 		if ((x > 0) && CheckMove(y, x - 1))
 		{
-		    mvaddch(y, x, EMPTY);
+		    mvaddch(y, x, GRASS);
 			x = x - 1;
 		}
 		break;
 	case KEY_RIGHT:
 		if ((x < COLS - 1) && CheckMove(y, x + 1))
 		{
-			mvaddch(y, x, EMPTY);
+			mvaddch(y, x, GRASS);
 			x = x + 1;
 		}
 		break;

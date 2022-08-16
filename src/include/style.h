@@ -9,5 +9,7 @@
 // Characters
 #define PLAYER    '@'
 #define PLAYER_COL 4
-#define MONS 'M'
-#define MONS_COL 5
+#define MONS      'M'
+#define MONS_COL   5
+// Outputs
+#define WARNING_COL 6
